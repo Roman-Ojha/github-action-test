@@ -1,0 +1,49 @@
+name: Java CI with Gradle
+# this is the name of the workflow which describe what workflow is doing
+# ..is deployed on you repos action page
+
+on:
+  # These are the event. so, every time some events happen we can we can trigger certain workflow
+  # ..name of GitHub even that triggers the workflows
+  push:
+    branches: [main]
+    # so here every time someone push to mater branch we want to trigger this workflow
+  pull_request:
+    branches: [main]
+    # every time pull_request created trigger this workflow
+    # -> https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
+
+permissions:
+  contents: read
+
+jobs:
+  # now this is the part that get executed whenever those event happen that we have mention in above
+  # Jobs groups set of action that will be executed
+  build:
+    # name of the jobs
+    runs-on: ubuntu-latest
+    #
+
+    steps:
+      - uses: actions/checkout@v2
+        # so when every we want to build the application or run test we need to check out the repository or the code first
+        # actions/ is where predefined action are hosted
+        # so every time we use CI/CD pipelining we will need to use checkout comment
+        # https://github.com/actions
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        # next step is to setup-java and prepare environment with java with version that we defined bellow
+        with:
+          java-version: "1.8"
+          distribution: "temurin"
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        # this command will change's the permission of gradle file
+        # so when ever we are referring to a action in a repository we use 'uses' attribute
+        # but when ever we are running a command we will use 'run' attribute
+
+      - name: Build with Gradle
+        run: ./gradlew build
+        # here we are building
+
