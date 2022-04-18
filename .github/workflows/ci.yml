@@ -37,8 +37,8 @@ jobs:
           java-version: "1.8"
           distribution: "temurin"
 
-      - name: Grant execute permission for gradle
-        run: chmod + x gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
         # this command will change's the permission of gradle file
         # so when ever we are referring to a action in a repository we use 'uses' attribute
         # but when ever we are running a command we will use 'run' attribute
@@ -46,3 +46,4 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
         # here we are building
+
