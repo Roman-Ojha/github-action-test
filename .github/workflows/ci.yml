@@ -21,8 +21,16 @@ jobs:
   # Jobs groups set of action that will be executed
   build:
     # name of the jobs
-    runs-on: ubuntu-latest
-    #
+    # runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}
+    # now here we are referring on all the os that we had specify on 'matrix.os' on bellow
+    # runs on Ubuntu,Windows or macOS
+    # for Example you have and application that you are shipping out to customers that have all three operating system you can test each release for example or each commit to main you can test that on all three operating system
+    # to do that:
+    strategy:
+      matrix:
+        # matrix will use whenever you want to use multiple operating system or may be multiple version of application ex: java
+        os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
       - uses: actions/checkout@v2
