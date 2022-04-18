@@ -55,24 +55,38 @@ jobs:
         run: ./gradlew build
         # here we are building
 
-      - name: Build and Push Docker Image
-        # next step is to build the docker image and push into docker hub
-        # we have either using a command or using the action
-        # so we can write the command that we need for build and pushing docker image this will be: docker login with credentials, docker build, docker push, docker tag
-        # Note: whenever you want to execute step which multiple command that we can do that by pipe syntax '|'
-        # Note: in ubuntu docker will come pre install
-        # run: |
-        #   docker push
+      # - name: Build and Push Docker Image
+      # next step is to build the docker image and push into docker hub
+      # we have either using a command or using the action
+      # so we can write the command that we need for build and pushing docker image this will be: docker login with credentials, docker build, docker push, docker tag
+      # Note: whenever you want to execute step which multiple command that we can do that by pipe syntax '|'
+      # Note: in ubuntu docker will come pre install
+      # run: |
+      #   docker push
 
-        # but alternative to command we can use action
-        # so we can search for these kind of action for example in github marketplace
-        # https://github.com/mr-smithers-excellent/docker-build-push
-        uses: mr-smithers-excellent/docker-build-push@v5
+      # but alternative to command we can use action
+      # so we can search for these kind of action for example in github marketplace
+      # https://github.com/mr-smithers-excellent/docker-build-push
+      # uses: mr-smithers-excellent/docker-build-push@v4
+      # with:
+      #   image: romanojha/demo-app
+      #   # we are have to specify the id/image_name
+      #   registry: docker.io
+      #   username: ${{ secrets.DOCKER_USERNAME }}
+      #   password: ${{ secrets.DOCKER_PASSWORD }}
+      # so we have to put some important credential as secret for that github provide us the secrets so, go to settings/secrets and create a new secret there
+      # now we will just use one os now
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
         with:
-          image: romanojha/demo-app
-          # we are have to specify the id/image_name
-          registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          # so we have to put some important credential as secret for that github provide us the secrets so, go to settings/secrets and create a new secret there
-          # now we will just use one os now
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: romanojha/demo-app:latest
